@@ -17,7 +17,7 @@ plugins {
 
 // Set the same group and version as your main library
 group = "eu.anifantakis"
-version = "2.0.0-RC2"
+version = "2.0.0-RC2-harukeyua.1"
 
 kotlin {
     androidLibrary {
@@ -130,26 +130,10 @@ kotlin {
     }
 }
 
-//publishing {
-//    publications {
-//        val kotlinMultiplatformPublication = publications.getByName("kotlinMultiplatform") as MavenPublication
-//        kotlinMultiplatformPublication.groupId = group.toString()
-//        kotlinMultiplatformPublication.artifactId = "ksafe-compose"
-//        kotlinMultiplatformPublication.version = version.toString()
-//    }
-//    repositories {
-//        mavenLocal()
-//    }
-//}
-
-// Add the same publishing configuration as your main library
 mavenPublishing {
-    publishToMavenCentral()
-
-    signAllPublications()
     coordinates(
         groupId = group.toString(),
-        artifactId = "ksafe-compose",  // Different artifactId
+        artifactId = "ksafe-compose",
         version = version.toString()
     )
 
@@ -157,7 +141,7 @@ mavenPublishing {
         name = "KSafe Compose - Jetpack Compose Extensions"
         description = "Jetpack Compose extensions for KSafe MultiPlatform Encrypted Persistence library"
         inceptionYear = "2025"
-        url = "https://github.com/ioannisa/ksafe"
+        url = "https://github.com/HarukeyUA/KSafe"
         licenses {
             license {
                 name = "Apache-2.0"
@@ -173,13 +157,24 @@ mavenPublishing {
             }
         }
         scm {
-            url = "https://github.com/ioannisa/ksafe"
-            connection = "scm:git:https://github.com/ioannisa/ksafe.git"
-            developerConnection = "scm:git:ssh://git@github.com/ioannisa/ksafe.git"
+            url = "https://github.com/HarukeyUA/KSafe"
+            connection = "scm:git:https://github.com/HarukeyUA/KSafe.git"
+            developerConnection = "scm:git:ssh://git@github.com/HarukeyUA/KSafe.git"
         }
     }
 }
 
-
-// task() is deprecated
-// task("testClasses") {}
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/HarukeyUA/KSafe")
+            credentials {
+                username = providers.gradleProperty("gpr.user").orNull
+                    ?: System.getenv("GITHUB_ACTOR")
+                password = providers.gradleProperty("gpr.key").orNull
+                    ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
